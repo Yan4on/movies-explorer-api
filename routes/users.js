@@ -1,5 +1,7 @@
-const userRouter = require('express').Router();
+const routerUser = require('express').Router();
 
 
-userRouter.get('/:id');
-userRouter.patch('/me');
+routerUser.get('/me');
+routerUser.patch('/me');
+
+module.exports = routerUser;

@@ -1,6 +1,8 @@
-const movieRouter = require('express').Router();
+const routerMovie = require('express').Router();
 
 
-movieRouter.get('/movies');
-movieRouter.post('/movies');
-movieRouter.delete('/movies/movieId');
+routerMovie.get('/');
+routerMovie.post('/');
+routerMovie.delete('/movieId');
+
+module.exports = routerMovie;
