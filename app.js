@@ -10,6 +10,7 @@ const limiter = require('./middlewares/limiters');
 const errorsHandler = require('./middlewares/errorsHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const mongoPath = require('./utils/config');
+const { corsOptions } = require('./utils/cors-option');
 
 const { NODE_ENV, MONGO_URL } = process.env;
 
@@ -23,9 +24,9 @@ mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : mongoPath, {
   useUnifiedTopology: true,
 });
 
+app.use('*', cors(corsOptions));
 app.use(requestLogger); // Логгер запросов
 app.use(bodyParser.json());
-app.use(cors());
 app.use(helmet());
 app.use(limiter);
 app.use('/', router);
