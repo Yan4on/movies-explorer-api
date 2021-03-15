@@ -1,65 +1,96 @@
-const Movie = require('../models/movies');
+const Movie = require('../models/movie');
+const BadRequestError = require('../errors/bad-request-err');
+const ForbiddenError = require('../errors/forbidden-err');
+const NotFoundError = require('../errors/not-found-err');
+const ConflictError = require('../errors/conflict-err');
+const {
+  movieIdUsedError,
+  movieIdIncorrectError,
+  movieNotFoundError,
+  noAccessError,
+  movieDeletedMessage,
+} = require('../utils/messageErr');
 
-module.exports.getMovies = (req, res, next) => {
-  return Movie.find({})
-    .populate(['owner'])
+const getUserMovies = (req, res, next) => {
+  Movie.find({ owner: req.user._id })
     .then((movies) => res.status(200).send(movies))
     .catch(next);
 };
 
-module.exports.createMovie = (req, res, next) => {
+const createFilm = (req, res, next) => {
   const {
-    movieId, nameRU, nameEN, description, year, director,
-    country, duration, image, thumbnail, trailer,
+    country,
+    director,
+    duration,
+    year,
+    description,
+    image,
+    trailer,
+    thumbnail,
+    movieId,
+    nameRU,
+    nameEN,
   } = req.body;
 
-  return Movie.findOne({ movieId })
-    .then((movieIdInMongo) => {
-      if (movieIdInMongo) {
-        throw new ConflictError();
+  Movie.findOne({ movieId })
+    .then((m) => {
+      if (m) {
+        throw new ConflictError(movieIdUsedError);
       }
-      return Movie.create({
+      Movie.create({
+        country,
+        director,
+        duration,
+        year,
+        description,
+        image,
+        trailer,
+        thumbnail,
+        owner: req.user._id,
         movieId,
         nameRU,
         nameEN,
-        description,
-        year,
-        director,
-        country,
-        duration,
-        image,
-        thumbnail,
-        trailer,
-        owner: req.user._id,
-      });
+      })
+        .catch((err) => {
+          if (err.name === 'ValidationError') {
+            throw new BadRequestError(err.message);
+          }
+          return next(err);
+        })
+        .then((movie) => res.status(200).send(movie))
+        .catch(next);
     })
-    .then((movie) => {
-      const { _id } = movie;
-      return Movie.findById({ _id })
-        .populate('owner');
-    })
-    .then((movie) => res.status(200).send(movie))
     .catch(next);
-}
+};
 
-module.exports.delMovie = (req, res, next) => {
-  const { movieId } = req.params;
-  return Movie.findById(movieId)
+const deleteFilm = (req, res, next) => {
+  Movie.findById(req.params.movieId)
+    .catch((err) => {
+      if (err.kind === 'ObjectId') {
+        throw new BadRequestError(movieIdIncorrectError);
+      }
+      return next(err);
+    })
     .then((movie) => {
       if (!movie) {
-        throw new NotFoundError(MOVIE_NOT_FOUND);
+        throw new NotFoundError(movieNotFoundError);
       }
-
-      if (req.user._id === String(movie.owner)) {
-        return Movie.findByIdAndRemove(movieId);
-      }
-      throw new ForbiddenError(DELETE_FORBIDDEN);
-    })
-    .then((movie) => {
-      if (movie) {
-        return res.status(200).send({ message: `${MOVIE_DELETE}: '${movie.nameRU}'` });
-      }
-      throw new NotFoundError(MOVIE_NOT_FOUND);
+      return Movie.findById(req.params.movieId)
+        .then(() => {
+          if (movie.owner.toString() !== req.user._id) {
+            throw new ForbiddenError(noAccessError);
+          }
+          return Movie.findByIdAndRemove(req.params.movieId)
+            .then((m) => {
+              res.status(200).send({ message: `${movieDeletedMessage} '${m.nameRU}'` });
+            });
+        });
     })
     .catch(next);
-}
+};
+
+module.exports = {
+  getUserMovies,
+  createFilm,
+  deleteFilm,
+};
