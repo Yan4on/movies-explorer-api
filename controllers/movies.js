@@ -13,7 +13,7 @@ const {
 
 const getUserMovies = (req, res, next) => {
   Movie.find({ owner: req.user._id })
-    .then((movies) => res.status(200).send(movies))
+    .then((movies) => res.send(movies))
     .catch(next);
 };
 
@@ -75,15 +75,13 @@ const deleteFilm = (req, res, next) => {
       if (!movie) {
         throw new NotFoundError(movieNotFoundError);
       }
-      return Movie.findById(req.params.movieId)
-        .then(() => {
-          if (movie.owner.toString() !== req.user._id) {
-            throw new ForbiddenError(noAccessError);
-          }
-          return Movie.findByIdAndRemove(req.params.movieId)
-            .then((m) => {
-              res.status(200).send({ message: `${movieDeletedMessage} '${m.nameRU}'` });
-            });
+
+      if (movie.owner.toString() !== req.user._id) {
+        throw new ForbiddenError(noAccessError);
+      }
+      return Movie.findByIdAndRemove(req.params.movieId)
+        .then((m) => {
+          res.send({ message: `${movieDeletedMessage} '${m.nameRU}'` });
         });
     })
     .catch(next);

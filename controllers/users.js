@@ -27,7 +27,7 @@ const getUserData = (req, res, next) => {
       if (!user) {
         throw new NotFoundError(userNotFoundError);
       }
-      return res.status(200).send({ email: user.email, name: user.name });
+      return res.send({ email: user.email, name: user.name });
     })
     .catch(next);
 };
@@ -46,7 +46,7 @@ const updateUserData = (req, res, next) => {
       if (!user) {
         throw new NotFoundError(userNotFoundError);
       }
-      return res.status(200).send(user);
+      return res.send(user);
     })
     .catch(next);
 };
@@ -72,7 +72,7 @@ const createUser = (req, res, next) => {
           return next(err);
         })
         .then((user) => {
-          res.status(200).send({ email: user.email, name: user.name });
+          res.send({ email: user.email, name: user.name });
         })
         .catch(next);
     })
