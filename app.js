@@ -24,6 +24,29 @@ mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : mongoPath, {
   useUnifiedTopology: true,
 });
 
+const allowedCors = [
+  'http://127.0.0.1:3001',
+  'localhost:3000',
+  'http://yan4on.students.nomoredomains.icu',
+  'http://www.yan4on.students.nomoredomains.icu',
+  'https://yan4on.students.nomoredomains.icu',
+  'https://www.yan4on.students.nomoredomains.icu',
+];
+
+app.use(cors());
+app.use((req, res, next) => {
+  const { origin } = req.headers; // Записываем в переменную origin соответствующий заголовок
+
+  if (allowedCors.includes(origin)) {
+    // Проверяем, что значение origin есть среди разрешённых доменов
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+  }
+
+  next();
+});
+
 app.use('*', cors(corsOptions));
 app.use(requestLogger); // Логгер запросов
 app.use(bodyParser.json());
