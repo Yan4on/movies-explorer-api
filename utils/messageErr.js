@@ -18,6 +18,7 @@ const urlStringError = 'Строка должна быть записана в �
 const rusNameMovieError = 'Название фильма должно быть на русском языке';
 const engNameMovieError = 'Название фильма должно быть на английском языке';
 
+const userRegistrationSuccess = 'Успешная регистрация';
 const invalidEmailError = 'Введенный email не соответствует условиям';
 const passwordSpaceError = 'Не допускается использование пробелов при создании пароля';
 const nameSpaceError = 'Не допускается использование пробелов в имени';
@@ -42,4 +43,5 @@ module.exports = {
   needAuthError,
   serverError,
   requestLimitExceedError,
+  userRegistrationSuccess,
 };

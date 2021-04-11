@@ -7,8 +7,8 @@ const {
 } = require('../controllers/movies');
 const {
   urlStringError,
-  rusNameMovieError,
-  engNameMovieError,
+  // rusNameMovieError,
+  // engNameMovieError,
 } = require('../utils/messageErr');
 
 router.get('/', getUserMovies);
@@ -33,31 +33,35 @@ router.post('/', celebrate({
     image: Joi
       .string()
       .required()
-      .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
+      // eslint-disable-next-line no-useless-escape
+      .pattern(/^https?:\/\/(www\.)?[a-z0-9\-\.]+\.[a-z]{2,9}(:[0-9]{1,5})?\/?[a-z0-9\-\/\._~:\?#\[\]@!\$\&'\(\)\*\+\,\;\=\%]{0,}$/i)
       .message(urlStringError),
     trailer: Joi
       .string()
       .required()
-      .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
+      // eslint-disable-next-line no-useless-escape
+      .pattern(/^https?:\/\/(www\.)?[a-z0-9\-\.]+\.[a-z]{2,9}(:[0-9]{1,5})?\/?[a-z0-9\-\/\._~:\?#\[\]@!\$\&'\(\)\*\+\,\;\=\%]{0,}$/i)
       .message(urlStringError),
+
     thumbnail: Joi
       .string()
       .required()
-      .pattern(/^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w.-]*)*\/?$/)
+      // eslint-disable-next-line no-useless-escape
+      .pattern(/^https?:\/\/(www\.)?[a-z0-9\-\.]+\.[a-z]{2,9}(:[0-9]{1,5})?\/?[a-z0-9\-\/\._~:\?#\[\]@!\$\&'\(\)\*\+\,\;\=\%]{0,}$/i)
       .message(urlStringError),
     movieId: Joi
-      .string()
+      .number()
       .required(),
     nameRU: Joi
       .string()
-      .required()
-      .pattern(/^[?!,.\-а-яА-ЯёЁ0-9\s]+$/)
-      .message(rusNameMovieError),
+      .required(),
+    // .pattern(/^[\D]+$/)
+    // .message(rusNameMovieError),
     nameEN: Joi
       .string()
-      .required()
-      .pattern(/^[?!,.\-a-zA-Z0-9\s]+$/)
-      .message(engNameMovieError),
+      .required(),
+    // .pattern(/^[\D]+$/)
+    // .message(engNameMovieError),
   }),
 }), createFilm);
 
