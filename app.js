@@ -27,10 +27,10 @@ mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : mongoPath, {
 const allowedCors = [
   'http://127.0.0.1:3001',
   'localhost:3000',
-  'http://yan4on.students.nomoredomains.icu',
-  'http://www.yan4on.students.nomoredomains.icu',
-  'https://yan4on.students.nomoredomains.icu',
-  'https://www.yan4on.students.nomoredomains.icu',
+  'https://find-films.students.nomoredomains.icu',
+  'http://www.find-films.students.nomoredomains.icu',
+  'https://find-films.students.nomoredomains.icu',
+  'https://www.find-films.students.nomoredomains.icu',
 ];
 
 app.use(cors());
