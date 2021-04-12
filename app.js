@@ -25,11 +25,11 @@ mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : mongoPath, {
 });
 
 const allowedCors = [
+  'https://api.find-films.students.nomoredomains.icu',
   'https://find-films.students.nomoredomains.icu',
   'http://find-films.students.nomoredomains.icu',
   'https://www.find-films.students.nomoredomains.icu',
   'http://www.find-films.students.nomoredomains.icu',
-  'https://api.find-films.students.nomoredomains.icu',
   'http://api.find-films.students.nomoredomains.icu',
   'https://www.api.find-films.students.nomoredomains.icu',
   'http://www.api.find-films.students.nomoredomains.icu',
