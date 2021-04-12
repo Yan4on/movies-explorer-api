@@ -24,33 +24,36 @@ mongoose.connect(NODE_ENV === 'production' ? MONGO_URL : mongoPath, {
   useUnifiedTopology: true,
 });
 
-// const allowedCors = [
-//   'http://127.0.0.1:3001',
-//   'localhost:3000',
-//   'https://find-films.students.nomoredomains.icu',
-//   'http://www.find-films.students.nomoredomains.icu',
-//   'https://find-films.students.nomoredomains.icu',
-//   'https://www.find-films.students.nomoredomains.icu',
-// ];
+const allowedCors = [
+  'https://find-films.students.nomoredomains.icu',
+  'http://find-films.students.nomoredomains.icu',
+  'https://www.find-films.students.nomoredomains.icu',
+  'http://www.find-films.students.nomoredomains.icu',
+  'https://api.find-films.students.nomoredomains.icu',
+  'http://api.find-films.students.nomoredomains.icu',
+  'https://www.api.find-films.students.nomoredomains.icu',
+  'http://www.api.find-films.students.nomoredomains.icu',
+  'http://127.0.0.1:3001',
+  'localhost:3000',
+];
 
-// app.use(cors());
-// app.use((req, res, next) => {
-//   const { origin } = req.headers; // Записываем в переменную origin соответствующий заголовок
+app.use(cors());
+app.use((req, res, next) => {
+  const { origin } = req.headers; // Записываем в переменную origin соответствующий заголовок
 
-//   if (allowedCors.includes(origin)) {
-//     // Проверяем, что значение origin есть среди разрешённых доменов
-//     res.header('Access-Control-Allow-Origin', origin);
-//     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//     res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
-//   }
+  if (allowedCors.includes(origin)) {
+    // Проверяем, что значение origin есть среди разрешённых доменов
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE');
+  }
 
-//   next();
-// });
+  next();
+});
 
 // app.use('*', cors(corsOptions));
 app.use(requestLogger); // Логгер запросов
 app.use(bodyParser.json());
-app.use(cors());
 app.use(helmet());
 app.use(limiter);
 app.use('/', router);
