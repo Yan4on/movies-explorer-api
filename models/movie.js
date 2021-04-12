@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const {
   urlStringErrorError,
-  rusNameMovieError,
-  engNameMovieError,
+  // rusNameMovieError,
+  // engNameMovieError,
 } = require('../utils/messageErr');
 
 const movieSchema = new mongoose.Schema({
@@ -63,29 +63,28 @@ const movieSchema = new mongoose.Schema({
     required: true,
   },
   movieId: {
-    type: String,
+    type: Number,
     required: true,
-    unique: true,
   },
   nameRU: {
     type: String,
     required: true,
-    validate: {
-      validator(v) {
-        return /^[?!,.\-а-яА-ЯёЁ0-9\s]+$/.test(v);
-      },
-      message: rusNameMovieError,
-    },
+    // validate: {
+    // validator(v) {
+    //   return /^[?!,.\-а-яА-ЯёЁ0-9\s]+$/.test(v);
+    // },
+    // message: 'Поле "Название фильма на русском языке" обязательно',
+    // },
   },
   nameEN: {
     type: String,
     required: true,
-    validate: {
-      validator(v) {
-        return /^[?!,.\-a-zA-Z0-9\s]+$/.test(v);
-      },
-      message: engNameMovieError,
-    },
+    // validate: {
+    //   validator() {
+    //     return /^[?!,.\-a-zA-Z0-9\s]+$/.test(v);
+    //   },
+    //   message: 'Поле "Название фильма на английском языке" обязательно',
+    // },
   },
 });
 

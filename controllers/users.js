@@ -13,6 +13,7 @@ const {
   userNotFoundError,
   emailUsedError,
   invalidUserDataError,
+  userRegistrationSuccess,
 } = require('../utils/messageErr');
 
 const getUserData = (req, res, next) => {
@@ -71,8 +72,8 @@ const createUser = (req, res, next) => {
           }
           return next(err);
         })
-        .then((user) => {
-          res.send({ email: user.email, name: user.name });
+        .then(() => {
+          res.status(200).send({ successMessage: `${userRegistrationSuccess}` });
         })
         .catch(next);
     })
