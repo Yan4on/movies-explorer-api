@@ -10,7 +10,7 @@ const limiter = require('./middlewares/limiters');
 const errorsHandler = require('./middlewares/errorsHandler');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const mongoPath = require('./utils/config');
-const { corsOptions } = require('./utils/cors-option');
+// const { corsOptions } = require('./utils/cors-option');
 
 const { NODE_ENV, MONGO_URL } = process.env;
 
@@ -47,7 +47,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use('*', cors(corsOptions));
+// app.use('*', cors(corsOptions));
 app.use(requestLogger); // Логгер запросов
 app.use(bodyParser.json());
 app.use(helmet());
